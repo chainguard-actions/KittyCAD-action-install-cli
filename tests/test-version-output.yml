@@ -1,0 +1,34 @@
+name: Test Zoo CLI version output matches expected release
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert version output contains 0.2.21
+        env:
+          VERSION: ${{ steps.action.outputs.version }}
+        run: |
+          echo "version output: $VERSION"
+          if [[ "$VERSION" != *"0.2.21"* ]]; then
+            echo "FAIL: expected version to contain '0.2.21', got '$VERSION'"
+            exit 1
+          fi
+          echo "PASS: version '$VERSION' contains '0.2.21'"
+
+      - name: Assert zoo binary checksum matches expected
+        run: |
+          EXPECTED="ae007cff66e210d407145645e13c4f0fc4ebf2071d6dadfb76938bce5da8965e"
+          ACTUAL=$(sha256sum /usr/local/bin/zoo | awk '{print $1}')
+          echo "expected sha256: $EXPECTED"
+          echo "actual sha256:   $ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED" ]; then
+            echo "FAIL: sha256 mismatch"
+            exit 1
+          fi
+          echo "PASS: sha256 matches"
