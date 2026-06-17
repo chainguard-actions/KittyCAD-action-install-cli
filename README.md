@@ -1,14 +1,28 @@
-# KittyCAD/action-install-cli
+### Install KittyCAD CLI
 
-Install Zoo CLI on a Linux or Windows host for use in Github workflows
+Use the KittyCAD CLI in your Github workflows.
 
-Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at [https://github.com/KittyCAD/action-install-cli](https://github.com/KittyCAD/action-install-cli).
+Example usage:
+```yml
+name: Install KittyCAD cli and convert demo
+on:
+  pull_request:
+jobs:
+  convert-with-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: KittyCAD/action-install-cli@v0.2.12
+      - name: convert
+        run: kittycad file convert --output-format=stl test-file.obj ./
+        shell: powershell
+        env: 
+          KITTYCAD_TOKEN: ${{ secrets.KITTYCAD_TOKEN }}
+```
 
-## Versions
+Make sure you [generate your `KITTYCAD_TOKEN`](https://kittycad.io/account) and add it to your repo secrets
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v0.2.21 | [`v0.2.21`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.21) | [`e339db1`](https://github.com/KittyCAD/action-install-cli/commit/e339db10b79bc1776ea6babd0169c153ff2b8596) |
+Be sure to look at our [other Github Actions](https://github.com/marketplace?type=actions&query=kittycad+).
 
 ## Privacy
 

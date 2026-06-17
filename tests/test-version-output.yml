@@ -1,0 +1,38 @@
+name: Test KittyCAD CLI version output
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert version output contains expected version
+        env:
+          ACTUAL: ${{ steps.action.outputs.version }}
+        run: |
+          echo "actual version output: $ACTUAL"
+          if [ -z "$ACTUAL" ]; then
+            echo "FAIL: version output is empty"
+            exit 1
+          fi
+          if echo "$ACTUAL" | grep -q "0.2.16"; then
+            echo "PASS: version output contains '0.2.16'"
+          else
+            echo "FAIL: version output '$ACTUAL' does not contain '0.2.16'"
+            exit 1
+          fi
+
+      - name: Assert kittycad --version runs successfully
+        run: |
+          VERSION_OUTPUT=$(kittycad --version 2>&1 || true)
+          echo "kittycad --version output: $VERSION_OUTPUT"
+          if echo "$VERSION_OUTPUT" | grep -q "0.2.16"; then
+            echo "PASS: kittycad --version reports 0.2.16"
+          else
+            echo "FAIL: kittycad --version output '$VERSION_OUTPUT' does not contain '0.2.16'"
+            exit 1
+          fi
