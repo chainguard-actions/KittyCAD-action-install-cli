@@ -1,0 +1,48 @@
+name: Test KittyCAD CLI is executable after installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert kittycad binary is executable
+        run: |
+          BINARY="/usr/local/bin/kittycad"
+          echo "Checking binary at: $BINARY"
+          if [ ! -f "$BINARY" ]; then
+            echo "FAIL: kittycad binary not found at $BINARY"
+            exit 1
+          fi
+          if [ ! -x "$BINARY" ]; then
+            echo "FAIL: kittycad binary is not executable"
+            exit 1
+          fi
+          echo "PASS: kittycad binary exists and is executable"
+
+      - name: Assert kittycad --version returns output
+        run: |
+          VERSION_OUTPUT=$(kittycad --version 2>&1 || true)
+          echo "version output: $VERSION_OUTPUT"
+          if [ -z "$VERSION_OUTPUT" ]; then
+            echo "FAIL: kittycad --version produced no output"
+            exit 1
+          fi
+          echo "PASS: kittycad --version returned: $VERSION_OUTPUT"
+
+      - name: Assert version output contains expected version string
+        env:
+          ACTUAL: ${{ steps.action.outputs.version }}
+        run: |
+          echo "action output version: $ACTUAL"
+          # The version output should contain "0.1.1" since that is the pinned version
+          if echo "$ACTUAL" | grep -q "0.1.1"; then
+            echo "PASS: version output contains expected version 0.1.1"
+          else
+            echo "FAIL: version output '$ACTUAL' does not contain '0.1.1'"
+            exit 1
+          fi
