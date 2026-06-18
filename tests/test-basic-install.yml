@@ -1,0 +1,34 @@
+name: Test basic install of KittyCAD CLI
+on:
+  workflow_dispatch:
+jobs:
+  test-basic-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install KittyCAD CLI
+        id: action
+        uses: .
+
+      - name: Assert kittycad binary is on PATH
+        run: |
+          if ! command -v kittycad >/dev/null 2>&1; then
+            echo "FAIL: kittycad binary not found on PATH"
+            exit 1
+          fi
+          echo "PASS: kittycad binary found at $(command -v kittycad)"
+
+      - name: Assert kittycad binary is executable
+        run: |
+          KITTYCAD_PATH="$(command -v kittycad)"
+          if [ ! -x "$KITTYCAD_PATH" ]; then
+            echo "FAIL: kittycad binary is not executable"
+            exit 1
+          fi
+          echo "PASS: kittycad binary is executable"
+
+      - name: Assert kittycad --version runs successfully
+        run: |
+          kittycad --version
+          echo "PASS: kittycad --version exited with code $?"

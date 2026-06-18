@@ -1,0 +1,33 @@
+name: Test KittyCAD CLI version output
+on:
+  workflow_dispatch:
+jobs:
+  test-version-output:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install KittyCAD CLI
+        id: action
+        uses: .
+
+      - name: Assert kittycad --version exits successfully
+        run: |
+          VERSION_OUTPUT="$(kittycad --version)"
+          EXIT_CODE=$?
+          echo "kittycad --version output: $VERSION_OUTPUT"
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "FAIL: kittycad --version returned non-zero exit code $EXIT_CODE"
+            exit 1
+          fi
+          echo "PASS: kittycad --version succeeded with output: $VERSION_OUTPUT"
+
+      - name: Assert version output is non-empty string
+        run: |
+          VERSION_OUTPUT="$(kittycad --version)"
+          echo "version output: $VERSION_OUTPUT"
+          if [ -z "$VERSION_OUTPUT" ]; then
+            echo "FAIL: kittycad --version produced empty output"
+            exit 1
+          fi
+          echo "PASS: version output is non-empty: $VERSION_OUTPUT"
