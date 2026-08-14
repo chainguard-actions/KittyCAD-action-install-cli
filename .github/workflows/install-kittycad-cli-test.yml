@@ -1,0 +1,35 @@
+name: "test install cli action"
+
+on:
+    pull_request:
+
+permissions: {}
+
+jobs:
+  test-install-cli:
+    strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+      - uses: ./
+        id: install-kittycad
+      - name: check-install
+        env:
+          INSTALLED_VERSION: ${{ steps.install-kittycad.outputs.version }}
+        run: |
+            echo "Version from output is: $INSTALLED_VERSION"
+            kittycad --version
+
+  convert-with-powershell:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3
+      - uses: ./
+        id: install-kittycad
+      - name: convert
+        run: kittycad file convert test-file.obj test-output.stl
+        shell: powershell
+        env: 
+          KITTYCAD_TOKEN: ${{ secrets.KITTYCAD_API_TOKEN }}

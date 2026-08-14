@@ -1,0 +1,51 @@
+name: Test KittyCAD CLI is functional after installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert kittycad help command works
+        run: |
+          if ! kittycad -h >/dev/null 2>&1; then
+            echo "FAIL: kittycad -h returned non-zero exit code"
+            exit 1
+          fi
+          echo "PASS: kittycad -h succeeded"
+
+      - name: Assert kittycad version command works
+        run: |
+          OUTPUT="$(kittycad --version 2>&1)"
+          echo "kittycad --version output: $OUTPUT"
+          if [ -z "$OUTPUT" ]; then
+            echo "FAIL: kittycad --version produced no output"
+            exit 1
+          fi
+          echo "PASS: kittycad --version produced output: $OUTPUT"
+
+      - name: Assert kittycad binary is installed at expected location
+        run: |
+          EXPECTED="/usr/local/bin/kittycad"
+          if [ ! -f "$EXPECTED" ]; then
+            echo "FAIL: kittycad not found at expected location $EXPECTED"
+            exit 1
+          fi
+          echo "PASS: kittycad found at $EXPECTED"
+
+      - name: Assert version output matches binary version
+        env:
+          ACTION_VERSION: ${{ steps.action.outputs.version }}
+        run: |
+          BINARY_VERSION="$(kittycad --version 2>&1)"
+          echo "action output version: $ACTION_VERSION"
+          echo "binary version: $BINARY_VERSION"
+          if [ "$ACTION_VERSION" != "$BINARY_VERSION" ]; then
+            echo "FAIL: action version output '$ACTION_VERSION' does not match binary version '$BINARY_VERSION'"
+            exit 1
+          fi
+          echo "PASS: action version output matches binary version"

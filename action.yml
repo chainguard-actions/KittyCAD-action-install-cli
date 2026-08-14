@@ -30,12 +30,16 @@ runs:
     - name: install cli Linux
       id: install-kittycad-cli
       if: runner.os == 'Linux'
-      run: sudo --preserve-env "$GITHUB_ACTION_PATH/entrypoint.sh"
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: sudo --preserve-env "$ACTION_PATH/entrypoint.sh"
       shell: bash
     - name: install cli Windows
       if: runner.os == 'Windows'
       id: install-kittycad-cli-win
-      run: $GITHUB_ACTION_PATH/entrypoint-win.sh
+      env:
+        ACTION_PATH: ${{ github.action_path }}
+      run: "$ACTION_PATH/entrypoint-win.sh"
       shell: bash
     - id: set-output
       run: echo "::set-output name=version::$(kittycad --version)"

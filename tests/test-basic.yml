@@ -12,19 +12,40 @@ jobs:
 
       - name: Assert version output is set
         env:
-          ACTUAL: ${{ steps.action.outputs.version }}
+          VERSION: ${{ steps.action.outputs.version }}
         run: |
-          echo "actual version output: $ACTUAL"
-          if [ -z "$ACTUAL" ]; then
+          echo "version output: $VERSION"
+          if [ -z "$VERSION" ]; then
             echo "FAIL: version output is empty"
             exit 1
           fi
-          echo "PASS: version output is set to '$ACTUAL'"
+          echo "PASS: version output is non-empty: $VERSION"
 
       - name: Assert kittycad binary is on PATH
         run: |
-          if ! command -v kittycad &>/dev/null; then
+          if ! command -v kittycad >/dev/null 2>&1; then
             echo "FAIL: kittycad binary not found on PATH"
             exit 1
           fi
           echo "PASS: kittycad binary found at $(command -v kittycad)"
+
+      - name: Assert kittycad binary is executable
+        run: |
+          BINARY="$(command -v kittycad)"
+          if [ ! -x "$BINARY" ]; then
+            echo "FAIL: kittycad binary is not executable"
+            exit 1
+          fi
+          echo "PASS: kittycad binary is executable"
+
+      - name: Assert version matches expected v0.1.1
+        env:
+          VERSION: ${{ steps.action.outputs.version }}
+        run: |
+          echo "version: $VERSION"
+          if echo "$VERSION" | grep -q "0.1.1"; then
+            echo "PASS: version contains 0.1.1"
+          else
+            echo "FAIL: expected version to contain 0.1.1, got: $VERSION"
+            exit 1
+          fi
