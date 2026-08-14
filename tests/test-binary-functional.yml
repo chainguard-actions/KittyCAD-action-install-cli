@@ -1,0 +1,49 @@
+name: Test KittyCAD CLI binary is functional after install
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert binary is executable
+        run: |
+          BINARY_PATH="$(command -v kittycad)"
+          echo "binary path: $BINARY_PATH"
+          if [ ! -x "$BINARY_PATH" ]; then
+            echo "FAIL: kittycad binary is not executable"
+            exit 1
+          fi
+          echo "PASS: kittycad binary is executable"
+
+      - name: Assert help command exits successfully
+        run: |
+          if ! kittycad -h > /dev/null 2>&1; then
+            echo "FAIL: kittycad -h exited with non-zero status"
+            exit 1
+          fi
+          echo "PASS: kittycad -h ran successfully"
+
+      - name: Assert binary is installed at expected location
+        run: |
+          EXPECTED_PATH="/usr/local/bin/kittycad"
+          if [ ! -f "$EXPECTED_PATH" ]; then
+            echo "FAIL: kittycad not found at expected path $EXPECTED_PATH"
+            exit 1
+          fi
+          echo "PASS: kittycad found at $EXPECTED_PATH"
+
+      - name: Assert version output is non-empty
+        env:
+          VERSION: ${{ steps.action.outputs.version }}
+        run: |
+          echo "version: $VERSION"
+          if [ -z "$VERSION" ]; then
+            echo "FAIL: version output is empty"
+            exit 1
+          fi
+          echo "PASS: version output is non-empty: $VERSION"
