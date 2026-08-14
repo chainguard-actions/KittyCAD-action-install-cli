@@ -1,0 +1,35 @@
+name: Test basic Zoo CLI installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert version output is set
+        env:
+          VERSION: ${{ steps.action.outputs.version }}
+        run: |
+          echo "version output: $VERSION"
+          if [ -z "$VERSION" ]; then
+            echo "FAIL: version output is empty"
+            exit 1
+          fi
+          echo "PASS: version output is '$VERSION'"
+
+      - name: Assert zoo binary is on PATH
+        run: |
+          if ! command -v zoo &>/dev/null; then
+            echo "FAIL: zoo binary not found on PATH"
+            exit 1
+          fi
+          echo "PASS: zoo binary found at $(command -v zoo)"
+
+      - name: Assert zoo binary is executable and responds
+        run: |
+          zoo --version
+          echo "PASS: zoo --version succeeded"
