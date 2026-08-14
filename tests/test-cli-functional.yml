@@ -1,0 +1,38 @@
+name: Test KittyCAD CLI is functional after installation
+on:
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - id: action
+        uses: .
+
+      - name: Assert kittycad help command works
+        run: |
+          if ! kittycad -h; then
+            echo "FAIL: kittycad -h returned non-zero exit code"
+            exit 1
+          fi
+          echo "PASS: kittycad -h succeeded"
+
+      - name: Assert kittycad --version works
+        run: |
+          VERSION_OUTPUT="$(kittycad --version 2>&1 || true)"
+          echo "version output: $VERSION_OUTPUT"
+          if [ -z "$VERSION_OUTPUT" ]; then
+            echo "FAIL: kittycad --version produced no output"
+            exit 1
+          fi
+          echo "PASS: kittycad --version produced output: $VERSION_OUTPUT"
+
+      - name: Assert binary is installed at expected location
+        run: |
+          EXPECTED="/usr/local/bin/kittycad"
+          if [ ! -f "$EXPECTED" ]; then
+            echo "FAIL: kittycad not found at $EXPECTED"
+            exit 1
+          fi
+          echo "PASS: kittycad found at $EXPECTED"
