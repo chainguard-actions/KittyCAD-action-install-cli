@@ -1,34 +1,39 @@
-name: Test basic install of KittyCAD CLI
+name: Test basic KittyCAD CLI installation
 on:
   workflow_dispatch:
 jobs:
-  test-basic-install:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
-      - name: Install KittyCAD CLI
-        id: action
+      - id: action
         uses: .
+
+      - name: Assert version output is non-empty
+        env:
+          ACTUAL: ${{ steps.action.outputs.version }}
+        run: |
+          echo "actual version: $ACTUAL"
+          if [ -z "$ACTUAL" ]; then
+            echo "FAIL: expected version output to be non-empty"
+            exit 1
+          fi
+          echo "PASS: version output is '$ACTUAL'"
 
       - name: Assert kittycad binary is on PATH
         run: |
-          if ! command -v kittycad >/dev/null 2>&1; then
+          if ! command -v kittycad &>/dev/null; then
             echo "FAIL: kittycad binary not found on PATH"
             exit 1
           fi
-          echo "PASS: kittycad binary found at $(command -v kittycad)"
+          echo "PASS: kittycad found at $(command -v kittycad)"
 
       - name: Assert kittycad binary is executable
         run: |
-          KITTYCAD_PATH="$(command -v kittycad)"
-          if [ ! -x "$KITTYCAD_PATH" ]; then
+          BIN="$(command -v kittycad)"
+          if [ ! -x "$BIN" ]; then
             echo "FAIL: kittycad binary is not executable"
             exit 1
           fi
           echo "PASS: kittycad binary is executable"
-
-      - name: Assert kittycad --version runs successfully
-        run: |
-          kittycad --version
-          echo "PASS: kittycad --version exited with code $?"
