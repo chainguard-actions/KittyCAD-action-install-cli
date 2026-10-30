@@ -6,13 +6,13 @@ Hardened by [Chainguard](https://www.chainguard.dev) from the upstream action at
 
 ## Versions
 
-| Version | Tag | Upstream commit |
-|---------|-----|-----------------|
-| v0.0.5 | [`v0.0.5`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.0.5) | [`12aa5f9`](https://github.com/KittyCAD/action-install-cli/commit/12aa5f950043f514ee01203f32fcf8fa9ad14ca2) |
-| v0.1.1 | [`v0.1.1`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.1.1) | [`e263354`](https://github.com/KittyCAD/action-install-cli/commit/e26335459a56f191468e88c61d66f3f0b7d5dd79) |
-| v0.2.12 | [`v0.2.12`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.12) | [`2b5ff1f`](https://github.com/KittyCAD/action-install-cli/commit/2b5ff1fc2cd029d8ed0d475a0428c329c7d5089b) |
-| v0.2.16 | [`v0.2.16`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.16) | [`444bbf6`](https://github.com/KittyCAD/action-install-cli/commit/444bbf6ea68b25fa107debca3f3f0227169e17ec) |
-| v0.2.21 | [`v0.2.21`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.21) | [`e339db1`](https://github.com/KittyCAD/action-install-cli/commit/e339db10b79bc1776ea6babd0169c153ff2b8596) |
+| Version | Tag | Upstream commit | Hardening report |
+|---------|-----|-----------------|------------------|
+| v0.0.5 | [`v0.0.5`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.0.5) | [`12aa5f9`](https://github.com/KittyCAD/action-install-cli/commit/12aa5f950043f514ee01203f32fcf8fa9ad14ca2) | [`HARDENING.md`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/blob/v0.0.5/HARDENING.md) |
+| v0.1.1 | [`v0.1.1`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.1.1) | [`e263354`](https://github.com/KittyCAD/action-install-cli/commit/e26335459a56f191468e88c61d66f3f0b7d5dd79) | [`HARDENING.md`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/blob/v0.1.1/HARDENING.md) |
+| v0.2.12 | [`v0.2.12`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.12) | [`2b5ff1f`](https://github.com/KittyCAD/action-install-cli/commit/2b5ff1fc2cd029d8ed0d475a0428c329c7d5089b) | [`HARDENING.md`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/blob/v0.2.12/HARDENING.md) |
+| v0.2.16 | [`v0.2.16`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.16) | [`444bbf6`](https://github.com/KittyCAD/action-install-cli/commit/444bbf6ea68b25fa107debca3f3f0227169e17ec) | [`HARDENING.md`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/blob/v0.2.16/HARDENING.md) |
+| v0.2.21 | [`v0.2.21`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/tree/v0.2.21) | [`e339db1`](https://github.com/KittyCAD/action-install-cli/commit/e339db10b79bc1776ea6babd0169c153ff2b8596) | [`HARDENING.md`](https://github.com/chainguard-actions/KittyCAD-action-install-cli/blob/v0.2.21/HARDENING.md) |
 
 ## Privacy
 
